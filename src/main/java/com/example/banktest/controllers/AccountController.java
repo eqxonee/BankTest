@@ -4,6 +4,7 @@ package com.example.banktest.controllers;
 import com.example.banktest.dtos.AccountDeleteMoneyDto;
 import com.example.banktest.dtos.AccountGetAllDto;
 import com.example.banktest.dtos.AccountUpdateMoneyDto;
+import com.example.banktest.models.Account;
 import com.example.banktest.service.AccountService;
 
 import lombok.AllArgsConstructor;
@@ -35,8 +36,17 @@ public class AccountController {
 
     @PostMapping(value = "delete-money")
     public void deleteMoney(@RequestBody AccountDeleteMoneyDto accountDeleteMoneyDto) {
-        accountService.deleteMoneyById(accountDeleteMoneyDto);
-        sleep();
+        //accountService.deleteMoney2(accountDeleteMoneyDto);
+    }
+
+    @GetMapping("get-money-by-id/{id}")
+    public void getMoneyById(@PathVariable int id){
+        accountService.findMoneyAccounts(id);
+    }
+
+    @PostMapping(value = "update-money")
+    public void updateMoney(@RequestBody AccountUpdateMoneyDto accountUpdateMoneyDto) {
+        accountService.updateMoney(accountUpdateMoneyDto);
     }
 
     @SneakyThrows
