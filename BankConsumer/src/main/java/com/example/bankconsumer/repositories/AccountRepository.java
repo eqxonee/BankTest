@@ -1,6 +1,6 @@
-package com.example.banktest.repositories;
+package com.example.bankconsumer.repositories;
 
-import com.example.banktest.models.Account;
+import com.example.bankconsumer.models.Account;
 import jakarta.persistence.LockModeType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
@@ -23,12 +23,12 @@ public interface AccountRepository extends JpaRepository<Account,Long> {
 
 
 
-//    @Query(value = "SELECT money_amount FROM account WHERE id =:id FOR UPDATE",nativeQuery = true)
-//    int findMoneyAccount(@Param("id") int id);
-//
-//    @Modifying(clearAutomatically = true, flushAutomatically = true)
-//    @Query(value = "UPDATE account SET money_amount=:money_amount WHERE id=:id", nativeQuery = true)
-//    void updateAccount(@Param("money_amount") int money_amount,@Param("id") int id);
+    @Query(value = "SELECT money_amount FROM account WHERE id =:id FOR UPDATE",nativeQuery = true)
+    int findMoneyAccount(@Param("id") int id);
+
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
+    @Query(value = "UPDATE account SET money_amount=:money_amount WHERE id=:id", nativeQuery = true)
+    void updateAccount(@Param("money_amount") int money_amount,@Param("id") int id);
 
 
     //TODO 2 метода по снятию денег с кошелька , оба @Query , один SELECT , другой UPDATE

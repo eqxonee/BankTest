@@ -4,6 +4,7 @@ package com.example.banktest.controllers;
 import com.example.banktest.dtos.AccountDeleteMoneyDto;
 import com.example.banktest.dtos.AccountGetAllDto;
 import com.example.banktest.dtos.AccountUpdateMoneyDto;
+import com.example.banktest.dtos.ProducerDto;
 import com.example.banktest.models.Account;
 import com.example.banktest.service.AccountService;
 
@@ -39,14 +40,19 @@ public class AccountController {
         //accountService.deleteMoney2(accountDeleteMoneyDto);
     }
 
-    @GetMapping("get-money-by-id/{id}")
-    public void getMoneyById(@PathVariable int id){
-        accountService.findMoneyAccounts(id);
-    }
+//    @GetMapping("get-money-by-id/{id}")
+//    public void getMoneyById(@PathVariable int id){
+//        accountService.findMoneyAccounts(id);
+//    }
+//
+//    @PostMapping(value = "update-money")
+//    public void updateMoney(@RequestBody AccountUpdateMoneyDto accountUpdateMoneyDto) {
+//        accountService.updateMoney(accountUpdateMoneyDto);
+//    }
 
-    @PostMapping(value = "update-money")
-    public void updateMoney(@RequestBody AccountUpdateMoneyDto accountUpdateMoneyDto) {
-        accountService.updateMoney(accountUpdateMoneyDto);
+    @PostMapping(value = "kafka-update")
+    public void kafkaUpdate(@RequestBody ProducerDto producerDto){
+        accountService.sendMessage(producerDto);
     }
 
     @SneakyThrows

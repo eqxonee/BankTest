@@ -3,23 +3,34 @@ package com.example.banktest.service;
 import com.example.banktest.dtos.AccountDeleteMoneyDto;
 import com.example.banktest.dtos.AccountGetAllDto;
 import com.example.banktest.dtos.AccountUpdateMoneyDto;
+import com.example.banktest.dtos.ProducerDto;
 import com.example.banktest.models.Account;
 import com.example.banktest.repositories.AccountRepository;
 import com.google.gson.Gson;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import lombok.AllArgsConstructor;
+
+
+import lombok.Value;
+import org.apache.kafka.clients.producer.KafkaProducer;
+import org.apache.kafka.clients.producer.ProducerRecord;
 import org.modelmapper.ModelMapper;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.core.ProducerFactory;
+import org.springframework.kafka.transaction.KafkaTransactionManager;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 
-
+import java.security.Key;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 
 @Service
 @AllArgsConstructor
@@ -30,12 +41,13 @@ public class AccountService {
     private KafkaTemplate<String, String> kafkaTemplate;
     private Gson gson;
 
+
 //    @PersistenceContext
 //    EntityManager entityManager;
     //private TransactionTemplate transactionTemplate;
 
 
-    public List<AccountGetAllDto> getAll(){
+    public List<AccountGetAllDto> getAll() {
 
         List<Account> orders = accountRepository.findAll();
 
@@ -44,7 +56,7 @@ public class AccountService {
                 .collect(Collectors.toList());
     }
 
-    public void updateMoneyById(AccountUpdateMoneyDto accountUpdateMoneyDto){
+    public void updateMoneyById(AccountUpdateMoneyDto accountUpdateMoneyDto) {
         Optional<Account> findAccount = accountRepository.findById(accountUpdateMoneyDto.getId());
 
         findAccount.map(m -> {
@@ -56,12 +68,12 @@ public class AccountService {
     }
 
     @Transactional(isolation = Isolation.READ_COMMITTED, timeout = 3)
-    public void deleteMoneyById(AccountDeleteMoneyDto accountDeleteMoneyDto){
+    public void deleteMoneyById(AccountDeleteMoneyDto accountDeleteMoneyDto) {
 
         Optional<Account> findAccount = accountRepository.findAccountById(accountDeleteMoneyDto.getId());
 
         findAccount.map(m -> {
-            if(m.getMoneyAmount() < accountDeleteMoneyDto.getMoneyAmount()){
+            if (m.getMoneyAmount() < accountDeleteMoneyDto.getMoneyAmount()) {
                 throw new RuntimeException("Баланс не может быть ниже нуля");
             }
             m.setMoneyAmount(m.getMoneyAmount() - accountDeleteMoneyDto.getMoneyAmount());
@@ -72,39 +84,29 @@ public class AccountService {
     }
 
 
-    public int findMoneyAccounts(int id){
-
-        return accountRepository.findMoneyAccount(id);
-    }
-
-    @Transactional(isolation = Isolation.READ_COMMITTED, timeout = 3)
-    public void updateMoney(AccountUpdateMoneyDto accountUpdateMoneyDto){
-
-        accountRepository.updateAccount(findMoneyAccounts(Math.toIntExact(accountUpdateMoneyDto.getId())) - accountUpdateMoneyDto.getMoneyAmount(), Math.toIntExact(accountUpdateMoneyDto.getId()));
-
-        String kafka = gson.toJson(accountUpdateMoneyDto);
-        kafkaTemplate.send("topic2", kafka);
-
-        //return update;
-
-    }
+//    public int findMoneyAccounts(int id) {
+//
+//        return accountRepository.findMoneyAccount(id);
+//    }
+//
 //    @Transactional(isolation = Isolation.READ_COMMITTED, timeout = 3)
-//    public String deleteMoney2(AccountDeleteMoneyDto accountDeleteMoneyDto){
+//    public void updateMoney(AccountUpdateMoneyDto accountUpdateMoneyDto) {
+////        String kafka = gson.toJson(accountUpdateMoneyDto);
+////
+////        kafkaTemplate.send("topic3", kafka);
+////        boolean result = kafkaTemplate.executeInTransaction(t ->{
+////            t.send("topic3", kafka);
+////            return true;
+////        });
 //
-//        accountRepository.findAccountById2(accountDeleteMoneyDto.getMoneyAmount(), Math.toIntExact(accountDeleteMoneyDto.getId()));
+//            accountRepository.updateAccount(findMoneyAccounts(Math.toIntExact(accountUpdateMoneyDto.getId())) - accountUpdateMoneyDto.getMoneyAmount(), Math.toIntExact(accountUpdateMoneyDto.getId()));
 //
-//
-//        return "Record updated successfully using @Modifiying and @query Named Parameter";
+//    }
 
-
-
-
-
-//        Query query = (Query) entityManager.createNativeQuery("UPDATE account SET money_amount =:money_amount WHERE id =:id");
-//        query.setParameter("money_amount",findAccount2.get().getMoneyAmount());
-//        query.setParameter("id",accountDeleteMoneyDto.getId());
-//        query.executeUpdate();
-
-
+    @Transactional
+    public void sendMessage(ProducerDto producerDto){
+        String kafka = gson.toJson(producerDto);
+        kafkaTemplate.send("topic3", kafka);
     }
+}
 
