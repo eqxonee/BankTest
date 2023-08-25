@@ -8,8 +8,10 @@ import com.example.banktest.dtos.ProducerDto;
 import com.example.banktest.models.Account;
 import com.example.banktest.service.AccountService;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,6 +20,7 @@ import java.util.List;
 @RequestMapping("account")
 @AllArgsConstructor
 @CrossOrigin(origins = "*", maxAge = 3600)
+@Slf4j
 public class AccountController {
 
     private AccountService accountService;
@@ -51,7 +54,7 @@ public class AccountController {
 //    }
 
     @PostMapping(value = "kafka-update")
-    public void kafkaUpdate(@RequestBody ProducerDto producerDto){
+    public void kafkaUpdate(@RequestBody ProducerDto producerDto) throws JsonProcessingException {
         accountService.sendMessage(producerDto);
     }
 

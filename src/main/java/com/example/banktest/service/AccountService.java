@@ -6,30 +6,21 @@ import com.example.banktest.dtos.AccountUpdateMoneyDto;
 import com.example.banktest.dtos.ProducerDto;
 import com.example.banktest.models.Account;
 import com.example.banktest.repositories.AccountRepository;
-import com.google.gson.Gson;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
-
-
-import lombok.Value;
-import org.apache.kafka.clients.producer.KafkaProducer;
-import org.apache.kafka.clients.producer.ProducerRecord;
 import org.modelmapper.ModelMapper;
 import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.kafka.core.ProducerFactory;
-import org.springframework.kafka.transaction.KafkaTransactionManager;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 
-import java.security.Key;
+
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
+
 
 
 @Service
@@ -39,7 +30,7 @@ public class AccountService {
     private AccountRepository accountRepository;
     private ModelMapper modelMapper;
     private KafkaTemplate<String, String> kafkaTemplate;
-    private Gson gson;
+    private final ObjectMapper objectMapper;
 
 
 //    @PersistenceContext
@@ -103,10 +94,21 @@ public class AccountService {
 //
 //    }
 
+
+    private String writeValueAsString(ProducerDto producerDto) {
+        try {
+            return objectMapper.writeValueAsString(producerDto);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Writing value to JSON failed: " + producerDto.toString());
+        }
+    }
     @Transactional
-    public void sendMessage(ProducerDto producerDto){
-        String kafka = gson.toJson(producerDto);
-        kafkaTemplate.send("topic3", kafka);
+    public String sendMessage(ProducerDto producerDto) throws JsonProcessingException {
+        //String kafka = gson.toJson(producerDto);
+        String orderAsMessage = objectMapper.writeValueAsString(producerDto);
+        kafkaTemplate.send("topic3", orderAsMessage);
+        return "message sent";
     }
 }
 
