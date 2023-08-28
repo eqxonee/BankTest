@@ -107,7 +107,7 @@ public class AccountService {
     public String sendMessage(ProducerDto producerDto) throws JsonProcessingException {
         //String kafka = gson.toJson(producerDto);
         String orderAsMessage = objectMapper.writeValueAsString(producerDto);
-        kafkaTemplate.send("topic3", orderAsMessage);
+        kafkaTemplate.send("topic5", orderAsMessage);
         return "message sent";
     }
 }
