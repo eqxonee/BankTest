@@ -22,9 +22,6 @@ public class KafkaProducerConfig {
         configProps.put(
                 ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,
                 "localhost:39092,localhost:29092,localhost:49092");
-//        configProps.put(
-//                ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,
-//                "localhost:29092");
         configProps.put(
                 ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,
                 StringSerializer.class);
