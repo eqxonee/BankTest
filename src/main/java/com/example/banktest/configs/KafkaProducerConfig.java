@@ -21,7 +21,7 @@ public class KafkaProducerConfig {
         Map<String, Object> configProps = new HashMap<>();
         configProps.put(
                 ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,
-                "localhost:39092,localhost:29092");
+                "localhost:39092,localhost:29092,localhost:49092");
 //        configProps.put(
 //                ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,
 //                "localhost:29092");

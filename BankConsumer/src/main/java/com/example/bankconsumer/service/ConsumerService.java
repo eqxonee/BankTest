@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,14 +26,16 @@ public class ConsumerService {
         return accountRepository.findMoneyAccount(id);
     }
 
-    @KafkaListener(topics = "topic5",groupId = "group111",concurrency = "2")
+    @KafkaListener(topics = "topic5",groupId = "group111",concurrency = "3")
     @Transactional(isolation = Isolation.READ_COMMITTED, timeout = 3)
-    public void listen(String message) throws JsonProcessingException {
+    public void listen(String message, Acknowledgment acknowledgment) throws JsonProcessingException {
         ConsumerDto consumerDto = objectMapper.readValue(message,ConsumerDto.class);
         System.out.println(consumerDto);
 
 
         accountRepository.updateAccount(findMoneyAccounts(Math.toIntExact(consumerDto.getId())) - consumerDto.getMoneyAmount(), Math.toIntExact(consumerDto.getId()));
+
+        acknowledgment.acknowledge();
 
         //TODO Commit
     }
