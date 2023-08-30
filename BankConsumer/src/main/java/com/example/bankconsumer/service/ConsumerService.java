@@ -2,6 +2,7 @@ package com.example.bankconsumer.service;
 
 import com.example.bankconsumer.dtos.ConsumerDto;
 import com.example.bankconsumer.repositories.AccountRepository;
+import com.example.sampledto.sampleDto.SampleDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
@@ -29,14 +30,13 @@ public class ConsumerService {
     @KafkaListener(topics = "topic5",groupId = "group111",concurrency = "3")
     @Transactional(isolation = Isolation.READ_COMMITTED, timeout = 3)
     public void listen(String message, Acknowledgment acknowledgment) throws JsonProcessingException {
-        ConsumerDto consumerDto = objectMapper.readValue(message,ConsumerDto.class);
-        System.out.println(consumerDto);
+        SampleDto sampleDto = objectMapper.readValue(message,SampleDto.class);
+        System.out.println(sampleDto);
 
 
-        accountRepository.updateAccount(findMoneyAccounts(Math.toIntExact(consumerDto.getId())) - consumerDto.getMoneyAmount(), Math.toIntExact(consumerDto.getId()));
+        accountRepository.updateAccount(findMoneyAccounts(Math.toIntExact(sampleDto.getId())) - sampleDto.getMoneyAmount(), Math.toIntExact(sampleDto.getId()));
 
         acknowledgment.acknowledge();
 
-        //TODO Commit
     }
 }

@@ -8,6 +8,7 @@ import com.example.banktest.dtos.ProducerDto;
 import com.example.banktest.models.Account;
 import com.example.banktest.service.AccountService;
 
+import com.example.sampledto.sampleDto.SampleDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
@@ -54,8 +55,8 @@ public class AccountController {
 //    }
 
     @PostMapping(value = "kafka-update")
-    public void kafkaUpdate(@RequestBody ProducerDto producerDto) throws JsonProcessingException {
-        accountService.sendMessage(producerDto);
+    public void kafkaUpdate(@RequestBody SampleDto sampleDto) throws JsonProcessingException {
+        accountService.sendMessage(sampleDto);
     }
 
     @SneakyThrows

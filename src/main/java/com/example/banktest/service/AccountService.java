@@ -6,6 +6,7 @@ import com.example.banktest.dtos.AccountUpdateMoneyDto;
 import com.example.banktest.dtos.ProducerDto;
 import com.example.banktest.models.Account;
 import com.example.banktest.repositories.AccountRepository;
+import com.example.sampledto.sampleDto.SampleDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
@@ -104,9 +105,9 @@ public class AccountService {
         }
     }
     @Transactional
-    public String sendMessage(ProducerDto producerDto) throws JsonProcessingException {
+    public String sendMessage(SampleDto sampleDto) throws JsonProcessingException {
         //String kafka = gson.toJson(producerDto);
-        String orderAsMessage = objectMapper.writeValueAsString(producerDto);
+        String orderAsMessage = objectMapper.writeValueAsString(sampleDto);
         kafkaTemplate.send("topic5", orderAsMessage);
         return "message sent";
     }
