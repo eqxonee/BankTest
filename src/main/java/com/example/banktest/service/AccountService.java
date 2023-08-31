@@ -6,7 +6,8 @@ import com.example.banktest.dtos.AccountUpdateMoneyDto;
 import com.example.banktest.dtos.ProducerDto;
 import com.example.banktest.models.Account;
 import com.example.banktest.repositories.AccountRepository;
-import com.example.sampledto.sampleDto.SampleDto;
+
+import com.example.sampledto.SampleDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;

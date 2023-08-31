@@ -1,7 +1,5 @@
 package com.example.bankconsumer;
 
-import com.example.bankconsumer.repositories.AccountRepository;
-import com.example.bankconsumer.service.ConsumerService;
 import lombok.Builder;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.SpringApplication;

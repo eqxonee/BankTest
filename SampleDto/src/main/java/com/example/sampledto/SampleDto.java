@@ -1,4 +1,4 @@
-package com.example.sampledto.sampleDto;
+package com.example.sampledto;
 
 
 import lombok.AllArgsConstructor;

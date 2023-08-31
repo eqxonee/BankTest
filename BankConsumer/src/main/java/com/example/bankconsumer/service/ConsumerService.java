@@ -1,8 +1,10 @@
 package com.example.bankconsumer.service;
 
-import com.example.bankconsumer.dtos.ConsumerDto;
+
+
+
 import com.example.bankconsumer.repositories.AccountRepository;
-import com.example.sampledto.sampleDto.SampleDto;
+import com.example.sampledto.SampleDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;

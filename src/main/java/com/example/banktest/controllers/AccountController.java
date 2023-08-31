@@ -4,11 +4,10 @@ package com.example.banktest.controllers;
 import com.example.banktest.dtos.AccountDeleteMoneyDto;
 import com.example.banktest.dtos.AccountGetAllDto;
 import com.example.banktest.dtos.AccountUpdateMoneyDto;
-import com.example.banktest.dtos.ProducerDto;
-import com.example.banktest.models.Account;
 import com.example.banktest.service.AccountService;
 
-import com.example.sampledto.sampleDto.SampleDto;
+
+import com.example.sampledto.SampleDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
