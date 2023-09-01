@@ -1,11 +1,11 @@
-package com.example.banktest.service;
+package com.example.bankproducer.service;
 
-import com.example.banktest.dtos.AccountDeleteMoneyDto;
-import com.example.banktest.dtos.AccountGetAllDto;
-import com.example.banktest.dtos.AccountUpdateMoneyDto;
-import com.example.banktest.dtos.ProducerDto;
-import com.example.banktest.models.Account;
-import com.example.banktest.repositories.AccountRepository;
+import com.example.bankproducer.dtos.AccountDeleteMoneyDto;
+import com.example.bankproducer.dtos.AccountGetAllDto;
+import com.example.bankproducer.dtos.AccountUpdateMoneyDto;
+import com.example.bankproducer.dtos.ProducerDto;
+import com.example.bankproducer.repositories.AccountRepository;
+import com.example.bankproducer.models.Account;
 
 import com.example.sampledto.SampleDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -14,11 +14,9 @@ import lombok.AllArgsConstructor;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.concurrent.ListenableFuture;
 
 import java.util.List;
 import java.util.Optional;

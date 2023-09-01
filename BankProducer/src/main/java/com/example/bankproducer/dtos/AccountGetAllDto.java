@@ -1,4 +1,5 @@
-package com.example.banktest.dtos;
+package com.example.bankproducer.dtos;
+
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AccountUpdateMoneyDto {
+public class AccountGetAllDto {
     private Long id;
     private int accountNumber;
     private int moneyAmount;

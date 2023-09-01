@@ -1,10 +1,10 @@
-package com.example.banktest.controllers;
+package com.example.bankproducer.controllers;
 
 
-import com.example.banktest.dtos.AccountDeleteMoneyDto;
-import com.example.banktest.dtos.AccountGetAllDto;
-import com.example.banktest.dtos.AccountUpdateMoneyDto;
-import com.example.banktest.service.AccountService;
+import com.example.bankproducer.dtos.AccountDeleteMoneyDto;
+import com.example.bankproducer.dtos.AccountGetAllDto;
+import com.example.bankproducer.dtos.AccountUpdateMoneyDto;
+import com.example.bankproducer.service.AccountService;
 
 
 import com.example.sampledto.SampleDto;

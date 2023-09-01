@@ -1,4 +1,4 @@
-package com.example.banktest.models;
+package com.example.bankproducer.models;
 
 
 import jakarta.persistence.*;

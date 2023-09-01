@@ -1,4 +1,4 @@
-package com.example.banktest.configs;
+package com.example.bankproducer.configs;
 
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;

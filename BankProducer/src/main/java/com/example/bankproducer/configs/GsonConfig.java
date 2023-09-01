@@ -1,4 +1,4 @@
-package com.example.banktest.configs;
+package com.example.bankproducer.configs;
 
 import com.google.gson.Gson;
 import org.springframework.context.annotation.Bean;

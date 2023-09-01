@@ -1,13 +1,13 @@
-package src.main.java.com.example.banktest;
+package com.example.bankproducer;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class BankTestApplication {
+public class BankProducerApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(BankTestApplication.class, args);
+        SpringApplication.run(BankProducerApplication.class, args);
     }
 
 }
