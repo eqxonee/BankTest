@@ -11,13 +11,14 @@ import com.example.sampledto.SampleDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
-
-
+import org.springframework.util.concurrent.ListenableFuture;
 
 import java.util.List;
 import java.util.Optional;
@@ -107,9 +108,11 @@ public class AccountService {
     }
     @Transactional
     public String sendMessage(SampleDto sampleDto) throws JsonProcessingException {
-        //String kafka = gson.toJson(producerDto);
+                //String kafka = gson.toJson(producerDto);
+
         String orderAsMessage = objectMapper.writeValueAsString(sampleDto);
-        kafkaTemplate.send("topic5", orderAsMessage);
+        kafkaTemplate.send("topic8","kekw",orderAsMessage);
+        //ListenableFuture<SendResult<String, String>> result = (ListenableFuture<SendResult<String, String>>) kafkaTemplate.send("topic8","0",orderAsMessage);
         return "message sent";
     }
 }

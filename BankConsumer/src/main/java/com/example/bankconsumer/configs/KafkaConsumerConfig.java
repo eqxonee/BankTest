@@ -23,8 +23,11 @@ public class KafkaConsumerConfig {
         configProps.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
         configProps.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG,"false");
         configProps.put(ConsumerConfig.CLIENT_ID_CONFIG,"money");
-        configProps.put(ConsumerConfig.FETCH_MAX_WAIT_MS_CONFIG,"2000");
-        configProps.put(ConsumerConfig.REQUEST_TIMEOUT_MS_CONFIG,"60000");
+        configProps.put(ConsumerConfig.ISOLATION_LEVEL_CONFIG,"read_committed");
+//        configProps.put(ConsumerConfig.FETCH_MAX_WAIT_MS_CONFIG,"2000");
+//        configProps.put(ConsumerConfig.REQUEST_TIMEOUT_MS_CONFIG,"60000");
+
+
 
 
         return new DefaultKafkaConsumerFactory<>(configProps);

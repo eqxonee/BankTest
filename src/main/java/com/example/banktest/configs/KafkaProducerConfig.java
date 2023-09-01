@@ -33,6 +33,9 @@ public class KafkaProducerConfig {
         configProps.put(
                 CLIENT_ID_CONFIG,"money"
         );
+        configProps.put(ACKS_CONFIG,"all");
+        //configProps.put(MAX_IN_FLIGHT_REQUESTS_PER_CONNECTION, 1);
+        //configProps.put(PARTITIONER_CLASS_CONFIG, CustomPartitionar.class);
 
 
 
