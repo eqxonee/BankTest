@@ -28,7 +28,7 @@ public class ConsumerService {
         return accountRepository.findMoneyAccount(id);
     }
 
-    @KafkaListener(topics = "topic8",groupId = "group111",concurrency = "3")
+    @KafkaListener(topics = "topic9",groupId = "group111",concurrency = "3")
     @Transactional(isolation = Isolation.READ_COMMITTED, timeout = 3)
     public void listen(String message, Acknowledgment acknowledgment,
                        @Header(KafkaHeaders.RECEIVED_KEY) String key,

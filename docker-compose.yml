@@ -1,0 +1,148 @@
+services:
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:6.2.4
+    healthcheck:
+      test: [ "CMD", "nc", "-vz", "localhost", "2181" ]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - 22181:2181
+
+  broker:
+    image: confluentinc/cp-kafka:6.2.4
+    container_name: broker
+    depends_on:
+      zookeeper:
+        condition: service_healthy
+    ports:
+      - 29092:29092
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://broker:9092,PLAINTEXT_HOST://192.168.55.102:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
+      KAFKA_AUTO_LEADER_REBALANCE_ENABLE: 'true'
+
+
+
+  broker2:
+    image: confluentinc/cp-kafka:6.2.4
+    container_name: broker2
+    depends_on:
+       zookeeper:
+        condition: service_healthy
+    ports:
+        - 39092:39092
+    environment:
+       KAFKA_BROKER_ID: 2
+       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://broker2:9092,PLAINTEXT_HOST://192.168.55.102:39092
+       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
+       KAFKA_AUTO_LEADER_REBALANCE_ENABLE: 'true'
+
+  broker3:
+    image: confluentinc/cp-kafka:6.2.4
+    container_name: broker3
+    depends_on:
+      zookeeper:
+         condition: service_healthy
+    ports:
+       - 49092:49092
+    environment:
+      KAFKA_BROKER_ID: 3
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://broker3:9092,PLAINTEXT_HOST://192.168.55.102:49092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
+      KAFKA_AUTO_LEADER_REBALANCE_ENABLE: 'true'
+
+
+  wallet-db:
+    image: postgres:alpine3.18
+    depends_on:
+      - zookeeper
+      - broker
+      - broker2
+      - broker3
+    container_name: wallet-db
+    ports:
+      - "6541:5432"
+    environment:
+      - POSTGRES_DB=java_bank_db
+      - POSTGRES_USER=java_bank_user
+      - POSTGRES_PASSWORD=12345
+  #Запуск приложения в докере
+#  postgres:
+#    image: postgres:13.3
+#    restart: unless-stopped
+#    depends_on:
+#      - zookeeper
+#      - broker
+#      - broker2
+#      - broker3
+#    ports:
+#      - "8082:8082"
+#    environment:
+#      POSTGRES_DB: "java_bank_db"
+#      POSTGRES_USER: "java_bank_user"
+#      POSTGRES_PASSWORD: "12345"
+#      PGDATA: "/var/lib/postgresql/data/pgdata"
+#    volumes:
+#      - ./dbdata:/var/lib/postgresql/data
+#      - ./dbroot:/root
+#      - ./dbroot/init.sql:/docker-entrypoint-initdb.d/db.sql
+#    healthcheck:
+#      test: [ "CMD-SHELL", "sh -c 'pg_isready -U postgres -d postgres'" ]
+#      interval: 10s
+#      timeout: 5s
+#      retries: 5
+
+
+  producer:
+    build: ./BankProducer
+    image: producer
+    depends_on:
+      - wallet-db
+    container_name: wallet-producer
+#    network_mode: "host"
+    ports:
+      - "8085:8085"
+    environment:
+      - SPRING_KAFKA_BOOTSTRAP-SERVERS=broker2:39092,broker:29092,broker3:49092
+
+  consumer:
+    build: ./BankConsumer
+    image: consumer
+    container_name: consumer
+#    network_mode: "host"
+    ports:
+      - "8080:8080"
+    depends_on:
+      - wallet-db
+      - producer
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://wallet-db:5432/java_bank_db
+      - POSTGRES_USER=java_bank_user
+      - POSTGRES_PASSWORD=12345
+      - SPRING_KAFKA_BOOTSTRAP-SERVERS=broker2:39092,broker:29092,broker3:49092
+
+
+#
+#  TestApplication:
+#    build: /TestApplication
+#    image: test-application
+#    container_name: test-application
+#    depends_on:
+#      - WalletProducer
+#      - WalletConsumer1
+#      - WalletConsumer2
