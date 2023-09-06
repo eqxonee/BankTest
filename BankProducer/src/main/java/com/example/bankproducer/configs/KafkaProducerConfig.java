@@ -1,11 +1,13 @@
 package com.example.bankproducer.configs;
 
 import lombok.Data;
+import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.kafka.config.TopicBuilder;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
@@ -19,6 +21,14 @@ import static org.apache.kafka.clients.producer.ProducerConfig.*;
 @Data
 @Configuration
 public class KafkaProducerConfig {
+
+    @Bean
+    public NewTopic topic(){
+        return TopicBuilder.name("topic10")
+                .partitions(3)
+                .replicas(3)
+                .build();
+    }
 
     @Value(value = "${spring.kafka.bootstrap-servers}")
     private String bootstrapAddress;

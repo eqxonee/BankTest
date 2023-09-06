@@ -30,8 +30,6 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
       KAFKA_AUTO_LEADER_REBALANCE_ENABLE: 'true'
 
-
-
   broker2:
     image: confluentinc/cp-kafka:6.2.4
     container_name: broker2
@@ -81,38 +79,12 @@ services:
       - POSTGRES_DB=java_bank_db
       - POSTGRES_USER=java_bank_user
       - POSTGRES_PASSWORD=12345
-  #Запуск приложения в докере
-#  postgres:
-#    image: postgres:13.3
-#    restart: unless-stopped
-#    depends_on:
-#      - zookeeper
-#      - broker
-#      - broker2
-#      - broker3
-#    ports:
-#      - "8082:8082"
-#    environment:
-#      POSTGRES_DB: "java_bank_db"
-#      POSTGRES_USER: "java_bank_user"
-#      POSTGRES_PASSWORD: "12345"
-#      PGDATA: "/var/lib/postgresql/data/pgdata"
-#    volumes:
-#      - ./dbdata:/var/lib/postgresql/data
-#      - ./dbroot:/root
-#      - ./dbroot/init.sql:/docker-entrypoint-initdb.d/db.sql
-#    healthcheck:
-#      test: [ "CMD-SHELL", "sh -c 'pg_isready -U postgres -d postgres'" ]
-#      interval: 10s
-#      timeout: 5s
-#      retries: 5
-
 
   producer:
     build: ./BankProducer
     image: producer
     depends_on:
-      - wallet-db
+      - broker
     container_name: wallet-producer
 #    network_mode: "host"
     ports:
@@ -130,19 +102,12 @@ services:
     depends_on:
       - wallet-db
       - producer
+      - broker
+      - broker2
+      - broker3
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://wallet-db:5432/java_bank_db
       - POSTGRES_USER=java_bank_user
       - POSTGRES_PASSWORD=12345
       - SPRING_KAFKA_BOOTSTRAP-SERVERS=broker2:39092,broker:29092,broker3:49092
 
-
-#
-#  TestApplication:
-#    build: /TestApplication
-#    image: test-application
-#    container_name: test-application
-#    depends_on:
-#      - WalletProducer
-#      - WalletConsumer1
-#      - WalletConsumer2
