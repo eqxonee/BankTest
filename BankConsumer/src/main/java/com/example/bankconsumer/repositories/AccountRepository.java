@@ -1,7 +1,5 @@
 package com.example.bankconsumer.repositories;
 
-
-
 import com.example.bankconsumer.models.Account;
 import jakarta.persistence.LockModeType;
 import org.springframework.data.jpa.repository.JpaRepository;

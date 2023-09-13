@@ -1,16 +1,19 @@
 package com.example.bankconsumer.configs;
 
 import org.apache.kafka.clients.consumer.ConsumerConfig;
+import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
+import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
-import org.springframework.kafka.core.ConsumerFactory;
-import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
+import org.springframework.kafka.core.*;
 import org.springframework.kafka.listener.ContainerProperties;
 
 import java.util.*;
+
+import static org.apache.kafka.clients.producer.ProducerConfig.*;
 
 @Configuration
 public class KafkaConsumerConfig {
@@ -31,9 +34,6 @@ public class KafkaConsumerConfig {
 //        configProps.put(ConsumerConfig.FETCH_MAX_WAIT_MS_CONFIG,"2000");
 //        configProps.put(ConsumerConfig.REQUEST_TIMEOUT_MS_CONFIG,"60000");
 
-
-
-
         return new DefaultKafkaConsumerFactory<>(configProps);
     }
 
@@ -46,6 +46,8 @@ public class KafkaConsumerConfig {
         factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.MANUAL_IMMEDIATE);
         return factory;
     }
+
+
 
 
 }
