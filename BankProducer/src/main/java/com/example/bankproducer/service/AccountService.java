@@ -110,7 +110,7 @@ public class AccountService {
                 //String kafka = gson.toJson(producerDto);
 
         String orderAsMessage = objectMapper.writeValueAsString(sampleDto);
-        kafkaTemplate.send("topic10","kekw",orderAsMessage);
+        kafkaTemplate.send("topic11","kekw",orderAsMessage);
         //ListenableFuture<SendResult<String, String>> result = (ListenableFuture<SendResult<String, String>>) kafkaTemplate.send("topic8","0",orderAsMessage);
         return "message sent";
     }

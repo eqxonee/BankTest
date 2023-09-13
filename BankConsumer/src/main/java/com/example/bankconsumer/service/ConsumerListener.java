@@ -10,9 +10,8 @@ import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Isolation;
-import org.springframework.transaction.annotation.Transactional;
 
+@Controller
 @AllArgsConstructor
 @EnableKafka
 public class ConsumerListener {
@@ -20,7 +19,7 @@ public class ConsumerListener {
     private final ObjectMapper objectMapper;
     private ConsumerKafkaService consumerKafkaService;
 
-    @KafkaListener(topics = "topic10",groupId = "group111",concurrency = "3")
+    @KafkaListener(topics = "topic11",groupId = "group111",concurrency = "3")
     public void listen(String message, Acknowledgment acknowledgment,
                        @Header(KafkaHeaders.RECEIVED_KEY) String key,
                        @Header(KafkaHeaders.RECEIVED_PARTITION) int partition,
