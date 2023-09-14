@@ -2,13 +2,10 @@ package com.example.bankconsumer.models;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name =  "account")
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
