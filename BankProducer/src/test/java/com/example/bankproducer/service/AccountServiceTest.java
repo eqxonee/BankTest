@@ -1,7 +1,6 @@
 package com.example.bankproducer.service;
 
 import com.example.bankproducer.controllers.AccountController;
-import com.example.bankproducer.repositories.AccountRepository;
 import com.example.sampledto.SampleDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -39,9 +38,6 @@ class AccountServiceTest {
 
     @Autowired
     private ObjectMapper objectMapper;
-
-    @Autowired
-    AccountRepository accountRepository;
 
     @Autowired
     AccountController accountController;

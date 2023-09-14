@@ -1,12 +1,12 @@
 package com.example.bankconsumer;
 
-import lombok.Builder;
-import org.modelmapper.ModelMapper;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.kafka.annotation.EnableKafka;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+
 
 @SpringBootApplication
+@EnableJpaRepositories
 public class BankConsumerApplication {
 
     public static void main(String[] args) {

@@ -1,9 +1,6 @@
 package com.example.bankproducer.controllers;
 
 
-import com.example.bankproducer.dtos.AccountDeleteMoneyDto;
-import com.example.bankproducer.dtos.AccountGetAllDto;
-import com.example.bankproducer.dtos.AccountUpdateMoneyDto;
 import com.example.bankproducer.service.AccountService;
 
 
@@ -24,34 +21,6 @@ import java.util.List;
 public class AccountController {
 
     private AccountService accountService;
-
-
-    @GetMapping("get-all")
-    public List<AccountGetAllDto> getAll(){
-        return accountService.getAll();
-    }
-
-    @PostMapping(value = "add-money")
-    public void addMoney(@RequestBody AccountUpdateMoneyDto accountUpdateMoneyDto) {
-        accountService.updateMoneyById(accountUpdateMoneyDto);
-        sleep();
-
-    }
-
-    @PostMapping(value = "delete-money")
-    public void deleteMoney(@RequestBody AccountDeleteMoneyDto accountDeleteMoneyDto) {
-        //accountService.deleteMoney2(accountDeleteMoneyDto);
-    }
-
-//    @GetMapping("get-money-by-id/{id}")
-//    public void getMoneyById(@PathVariable int id){
-//        accountService.findMoneyAccounts(id);
-//    }
-//
-//    @PostMapping(value = "update-money")
-//    public void updateMoney(@RequestBody AccountUpdateMoneyDto accountUpdateMoneyDto) {
-//        accountService.updateMoney(accountUpdateMoneyDto);
-//    }
 
     @PostMapping(value = "kafka-update")
     public void kafkaUpdate(@RequestBody SampleDto sampleDto) throws JsonProcessingException {
