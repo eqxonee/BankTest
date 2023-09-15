@@ -79,9 +79,4 @@ class AccountServiceTest {
 
     }
 
-//    @Test
-//    void deleteMoneyTest(SampleDto sampleDto) {
-//
-//        accountRepository.updateAccount(20000 - sampleDto.getMoneyAmount(),3);
-//    }
 }

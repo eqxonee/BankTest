@@ -1,41 +1,59 @@
 package com.example.bankconsumer.repositories;
 
 import com.example.bankconsumer.models.Account;
-import org.apache.kafka.clients.producer.KafkaProducer;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
-import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.kafka.test.context.EmbeddedKafka;
-import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
+import org.testcontainers.containers.KafkaContainer;
+import org.testcontainers.containers.Network;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
+import org.testcontainers.containers.PostgreSQLContainer;
 
 import java.util.Optional;
 
-import static org.assertj.core.api.FactoryBasedNavigableListAssert.assertThat;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 
-@DataJpaTest
-//@EmbeddedKafka(partitions = 3, brokerProperties = {"listeners=PLAINTEXT://localhost:29092", "port=9092"})
-//@SpringBootTest
-//@SpringBootApplication(exclude={DataSourceAutoConfiguration.class})
-//@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-//@EnableJpaRepositories(basePackages = {"com.example.bankconsumer.repositories"})
-//@EntityScan(basePackages = {"com.example.bankconsumer.models"})
+@SpringBootTest
+@Testcontainers
 class AccountRepositoryTest {
+
+    public static Network network = Network.newNetwork();
+    @Container
+    public static PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer<>("postgres:alpine3.18")
+            .withDatabaseName("java_bank_db")
+            .withUsername("java_bank_user")
+            .withPassword("12345")
+            .withNetwork(network);
+
+    @Container
+    public static KafkaContainer kafka1 = new KafkaContainer("6.2.4")
+            .withNetwork(network);
+
+    @Container
+    public static KafkaContainer kafka2 = new KafkaContainer("6.2.4")
+            .withNetwork(network);
+
+    @DynamicPropertySource
+    public static void registerKafkaProperties(DynamicPropertyRegistry registry) {
+        registry.add("spring.kafka.bootstrap-servers", () -> kafka1.getBootstrapServers() + "," + kafka2.getBootstrapServers());
+    }
+
+    @DynamicPropertySource
+    public static void registerPgProperties(DynamicPropertyRegistry registry) {
+        registry.add("spring.datasource.url", postgreSQLContainer::getJdbcUrl);
+        registry.add("spring.datasource.username", postgreSQLContainer::getUsername);
+        registry.add("spring.datasource.password", postgreSQLContainer::getPassword);
+        registry.add("spring.sql.init.schema-locations", () -> "classpath:schema.sql");
+    }
 
     @Autowired
     AccountRepository accountRepository;
-
 
     @Test
     void findMoneyAccount() {
@@ -48,6 +66,7 @@ class AccountRepositoryTest {
     }
 
     @Test
+    @Transactional
     void updateAccount() {
 
         Account account = new Account(1L,345,20000);
