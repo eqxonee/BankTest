@@ -48,7 +48,7 @@ class AccountServiceTest {
 
     BlockingQueue<ConsumerRecord<String, String>> consumerRecords = new LinkedBlockingQueue<>();
 
-    @KafkaListener(topics = "topic10", groupId = "group111", concurrency = "3")
+    @KafkaListener(topics = "topic11", groupId = "group111", concurrency = "3")
     public void listen(ConsumerRecord consumerRecord) throws JsonProcessingException {
         consumerRecords.add(consumerRecord);
     }

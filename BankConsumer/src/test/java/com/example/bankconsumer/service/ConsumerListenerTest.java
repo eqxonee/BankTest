@@ -77,6 +77,7 @@ class ConsumerListenerTest {
 
         assertEquals(newMoney.get().getMoneyAmount(),19000);
 
+
         //Бд ложится если поставить @SpringBootTest!
 
     }
