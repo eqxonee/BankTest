@@ -2,7 +2,10 @@ package com.example.bankprocessor.kafkaprocessor;
 
 
 import com.example.sampledto.SampleDto;
+import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.type.TypeFactory;
+import com.google.gson.Gson;
 import lombok.AllArgsConstructor;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
@@ -28,10 +31,9 @@ import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
+import java.io.IOException;
+import java.io.Reader;
+import java.util.*;
 import java.util.function.Function;
 
 @Component
@@ -40,6 +42,7 @@ import java.util.function.Function;
 public class FilterProcessor {
 
     private ObjectMapper objectMapper;
+    private Gson gson;
 
         @Bean
     NewTopic counts() {
@@ -47,17 +50,25 @@ public class FilterProcessor {
     }
 
     @Autowired
-    public void process(StreamsBuilder streamsBuilder) throws JsonProcessingException {
+    public void process(StreamsBuilder streamsBuilder) throws IOException {
 
         final Serde<String> stringSerde = Serdes.String();
         //final Serde<Long> longSerde = Serdes.Long();
+        TypeFactory typeFactory = objectMapper.getTypeFactory();
 
         KStream<String,String> textLines = streamsBuilder.stream("topic11", Consumed.with(stringSerde,stringSerde));
+        //SampleDto sampleDto = typeFactory.constructCollectionType(Collection.class,textLines);
 
-        SampleDto sampleDto = objectMapper.readValue(textLines.toString(),SampleDto.class);
-        sampleDto.setMoneyAmount(sampleDto.getMoneyAmount() - 10);
+        //String message = textLines.toString();
 
-        String orderAsMessage = objectMapper.writeValueAsString(sampleDto);
+
+        //SampleDto sampleDto = objectMapper.readValue(message,SampleDto.class);
+        //SampleDto sampleDto = gson.fromJson((Reader) textLines,SampleDto.class);
+        //sampleDto.setMoneyAmount(sampleDto.getMoneyAmount() - 10);
+
+
+        //String orderAsMessage = objectMapper.writeValueAsString(sampleDto);
+
 
 //        KTable<String, Long> values = textLines
 //                .flatMapValues(value -> Arrays.asList(value.toLowerCase().split("\\W+")))
@@ -65,7 +76,7 @@ public class FilterProcessor {
 //                .count();
 //
 //        values.toStream().to("topic13", Produced.with(stringSerde,longSerde));
-        textLines.mapValues(v -> orderAsMessage).to("topic13",Produced.with(stringSerde,stringSerde));
+        textLines.to("topic13",Produced.with(stringSerde,stringSerde));
     }
 
 }
