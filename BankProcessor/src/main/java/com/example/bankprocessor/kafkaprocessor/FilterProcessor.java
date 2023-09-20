@@ -51,12 +51,22 @@ public class FilterProcessor {
 
     @Autowired
     public void process(StreamsBuilder streamsBuilder) throws IOException {
+        StreamsBuilder builder = new StreamsBuilder();
 
         final Serde<String> stringSerde = Serdes.String();
         //final Serde<Long> longSerde = Serdes.Long();
         TypeFactory typeFactory = objectMapper.getTypeFactory();
 
         KStream<String,String> textLines = streamsBuilder.stream("topic11", Consumed.with(stringSerde,stringSerde));
+
+        textLines.peek((key,value) -> System.out.println("Value " + value));
+        textLines.peek((key,value) -> System.out.println("Key " + key));
+
+//        textLines.mapValues(value -> value.toLowerCase())
+//                .selectKey((key,value) -> value)
+//                .groupByKey()
+//                .count();
+
         //SampleDto sampleDto = typeFactory.constructCollectionType(Collection.class,textLines);
 
         //String message = textLines.toString();
