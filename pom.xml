@@ -90,6 +90,7 @@
         <module>BankConsumer</module>
         <module>SampleDto</module>
         <module>BankProducer</module>
+        <module>BankProcessor</module>
     </modules>
 
 
