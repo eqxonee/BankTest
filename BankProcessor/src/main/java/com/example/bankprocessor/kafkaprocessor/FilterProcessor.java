@@ -16,7 +16,6 @@ import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 
-
 @Component
 @EnableKafkaStreams
 @AllArgsConstructor
@@ -36,13 +35,13 @@ public class FilterProcessor {
         final Serde<String> stringSerde = Serdes.String();
 
         KStream<String,String> textLines = streamsBuilder.stream("topic11", Consumed.with(stringSerde,stringSerde));
+        KStream<String,String> textLines2;
 
-        textLines.mapValues((key,value) -> jsonParser(value));
-        textLines.peek((key,value) -> System.out.println("Key " + key));
-        textLines.peek((key,value) -> System.out.println("Value " + value));
+        textLines2 = textLines.mapValues((key,value) -> jsonParser(value));
+        textLines2.peek((key,value) -> System.out.println("Key " + key));
+        textLines2.peek((key,value) -> System.out.println("Value " + value));
 
-
-        textLines.to("topic13",Produced.with(stringSerde,stringSerde));
+        textLines2.to("topic13",Produced.with(stringSerde,stringSerde));
     }
 
     public String jsonParser(String textLines) {
