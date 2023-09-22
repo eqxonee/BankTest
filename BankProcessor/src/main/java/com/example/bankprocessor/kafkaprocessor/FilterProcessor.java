@@ -44,8 +44,8 @@ public class FilterProcessor {
         KTable<String, Long> streamTable = textLines
                 .peek((key,value) -> System.out.println("Key " + key))
                 .peek((key,value) -> System.out.println("Value " + value))
-                        .groupByKey()
-                                .count();
+                .groupByKey()
+                .count();
 
 
         KStream<String, String> textLines2 = textLines.leftJoin(streamTable, this::jsonParserStep);

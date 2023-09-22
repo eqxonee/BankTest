@@ -25,12 +25,13 @@ public class ConsumerKafkaService {
     @Transactional(isolation = Isolation.READ_COMMITTED)
     public void accountUpdate(StepDto stepDto) {
 
-        accountRepository.updateAccount(findMoneyAccounts(Math.toIntExact(stepDto.getId())) - stepDto.getMoneyAmount(), Math.toIntExact(stepDto.getId()));
-        accountRepository.updateAccountStep(stepDto.getStep(), Math.toIntExact(stepDto.getId()));
-
         if ( findMoneyAccounts(Math.toIntExact(stepDto.getId()))< 0) {
             throw new IllegalArgumentException("Недостаточно средств на кошельке");
         }
+
+        accountRepository.updateAccount(findMoneyAccounts(Math.toIntExact(stepDto.getId())) - stepDto.getMoneyAmount(), Math.toIntExact(stepDto.getId()));
+        accountRepository.updateAccountStep(stepDto.getStep(), Math.toIntExact(stepDto.getId()));
+
     }
 
 
