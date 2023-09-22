@@ -1,6 +1,7 @@
 package com.example.bankproducer.service;
 
 import com.example.sampledto.SampleDto;
+import com.example.stepdto.StepDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
@@ -22,6 +23,15 @@ public class AccountService {
     public String sendMessage(SampleDto sampleDto) throws JsonProcessingException {
 
         String orderAsMessage = objectMapper.writeValueAsString(sampleDto);
+        kafkaTemplate.send("topic11","kekw", orderAsMessage);
+
+        return "message sent";
+    }
+
+    @Transactional
+    public String sendMessageStep(StepDto stepDto) throws JsonProcessingException {
+
+        String orderAsMessage = objectMapper.writeValueAsString(stepDto);
         kafkaTemplate.send("topic11","kekw", orderAsMessage);
 
         return "message sent";

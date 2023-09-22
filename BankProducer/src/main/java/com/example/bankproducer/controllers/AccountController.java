@@ -5,6 +5,7 @@ import com.example.bankproducer.service.AccountService;
 
 
 import com.example.sampledto.SampleDto;
+import com.example.stepdto.StepDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
@@ -25,6 +26,11 @@ public class AccountController {
     @PostMapping(value = "kafka-update")
     public void kafkaUpdate(@RequestBody SampleDto sampleDto) throws JsonProcessingException {
         accountService.sendMessage(sampleDto);
+    }
+
+    @PostMapping(value = "kafka-update-step")
+    public void kafkaUpdateStep(@RequestBody StepDto stepDto) throws JsonProcessingException {
+        accountService.sendMessageStep(stepDto);
     }
 
     @SneakyThrows

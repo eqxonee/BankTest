@@ -91,6 +91,7 @@
         <module>SampleDto</module>
         <module>BankProducer</module>
         <module>BankProcessor</module>
+        <module>StepDto</module>
     </modules>
 
 
