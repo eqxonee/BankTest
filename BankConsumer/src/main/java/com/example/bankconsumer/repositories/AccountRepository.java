@@ -30,6 +30,10 @@ public interface AccountRepository extends JpaRepository<Account,Long> {
     @Query(value = "UPDATE account SET money_amount=:money_amount WHERE id=:id", nativeQuery = true)
     void updateAccount(@Param("money_amount") int money_amount,@Param("id") int id);
 
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
+    @Query(value = "UPDATE account SET step=:step WHERE id=:id", nativeQuery = true)
+    void updateAccountStep(@Param("step") int step,@Param("id") int id);
+
 
     //TODO 2 метода по снятию денег с кошелька , оба @Query , один SELECT , другой UPDATE
 

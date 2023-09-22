@@ -19,4 +19,7 @@ public class Account {
 
     @Column(name = "money_amount")
     private int moneyAmount;
+
+    @Column(name = "step")
+    private int step;
 }

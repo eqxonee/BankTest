@@ -1,6 +1,7 @@
 package com.example.bankconsumer.service;
 
 import com.example.sampledto.SampleDto;
+import com.example.stepdto.StepDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
@@ -19,21 +20,21 @@ public class ConsumerListener {
     private final ObjectMapper objectMapper;
     private ConsumerKafkaService consumerKafkaService;
 
-    @KafkaListener(topics = "topic13",groupId = "group111",concurrency = "3")
+    @KafkaListener(topics = "topic15",groupId = "group111",concurrency = "3")
     public void listen(String message, Acknowledgment acknowledgment,
                        @Header(KafkaHeaders.RECEIVED_KEY) String key,
                        @Header(KafkaHeaders.RECEIVED_PARTITION) int partition,
                        @Header(KafkaHeaders.RECEIVED_TOPIC) String topic,
                        @Header(KafkaHeaders.RECEIVED_TIMESTAMP) long ts) throws JsonProcessingException {
 
-        SampleDto sampleDto = objectMapper.readValue(message,SampleDto.class);
-        System.out.println(sampleDto);
+        StepDto stepDto = objectMapper.readValue(message,StepDto.class);
+        System.out.println(stepDto);
         System.out.println(key);
         System.out.println(partition);
         System.out.println(topic);
         System.out.println(ts);
 
-        consumerKafkaService.accountUpdate(sampleDto);
+        consumerKafkaService.accountUpdate(stepDto);
 
         acknowledgment.acknowledge();
 

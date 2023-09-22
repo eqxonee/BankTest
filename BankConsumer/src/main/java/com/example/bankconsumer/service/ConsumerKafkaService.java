@@ -4,6 +4,7 @@ import com.example.bankconsumer.dtos.ConsumerDto;
 import com.example.bankconsumer.models.Account;
 import com.example.bankconsumer.repositories.AccountRepository;
 import com.example.sampledto.SampleDto;
+import com.example.stepdto.StepDto;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.AllArgsConstructor;
@@ -22,11 +23,12 @@ public class ConsumerKafkaService {
     }
 
     @Transactional(isolation = Isolation.READ_COMMITTED)
-    public void accountUpdate(SampleDto sampleDto) {
+    public void accountUpdate(StepDto stepDto) {
 
-        accountRepository.updateAccount(findMoneyAccounts(Math.toIntExact(sampleDto.getId())) - sampleDto.getMoneyAmount(), Math.toIntExact(sampleDto.getId()));
+        accountRepository.updateAccount(findMoneyAccounts(Math.toIntExact(stepDto.getId())) - stepDto.getMoneyAmount(), Math.toIntExact(stepDto.getId()));
+        accountRepository.updateAccountStep(stepDto.getStep(), Math.toIntExact(stepDto.getId()));
 
-        if ( findMoneyAccounts(Math.toIntExact(sampleDto.getId()))< 0) {
+        if ( findMoneyAccounts(Math.toIntExact(stepDto.getId()))< 0) {
             throw new IllegalArgumentException("Недостаточно средств на кошельке");
         }
     }

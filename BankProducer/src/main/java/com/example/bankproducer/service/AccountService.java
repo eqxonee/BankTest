@@ -32,7 +32,7 @@ public class AccountService {
     public String sendMessageStep(StepDto stepDto) throws JsonProcessingException {
 
         String orderAsMessage = objectMapper.writeValueAsString(stepDto);
-        kafkaTemplate.send("topic11","kekw", orderAsMessage);
+        kafkaTemplate.send("topic13","kekw", orderAsMessage);
 
         return "message sent";
     }

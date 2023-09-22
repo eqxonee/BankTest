@@ -30,6 +30,14 @@ public class KafkaProducerConfig {
                 .build();
     }
 
+    @Bean
+    public NewTopic topicStep(){
+        return TopicBuilder.name("topic13")
+                .partitions(3)
+                .replicas(3)
+                .build();
+    }
+
     @Value(value = "${spring.kafka.bootstrap-servers}")
     private String bootstrapAddress;
     @Bean
